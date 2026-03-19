@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Proyección de Ideas — Proyectos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #1a1a1a;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.15);
+  --text: #f0f0f0;
+  --muted: #888;
+  --accent: #c8ff00;
+  --accent2: #7c3aed;
+  --danger: #ff4444;
+  --tag-mapping: #c8ff00;
+  --tag-fooh: #00ffcc;
+  --tag-hologramas: #ff9500;
+  --tag-inmersivos: #ff6b6b;
+  --tag-interactivos: #4db8ff;
+  --tag-pov: #b8b8b8;
+  --tag-reels: #ff80bf;
+  --tag-virtual: #80ff9e;
+  --tag-publicidad: #ffcc44;
+  --tag-destacados: #c8ff00;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── HEADER ─────────────────────────── */
+.header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-left h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.header-left h1 span { color: var(--accent); }
+.header-left p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+.btn-add {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+.btn-add:hover { opacity: .85; transform: translateY(-1px); }
+
+/* ── METRICS ─────────────────────────── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.metric {
+  background: var(--bg);
+  padding: 1.2rem 2rem;
+}
+.metric-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+/* ── TOOLBAR ─────────────────────────── */
+.toolbar {
+  padding: 1rem 2.5rem;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.toolbar input[type="text"],
+.toolbar select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color .15s;
+}
+.toolbar input[type="text"]:focus,
+.toolbar select:focus { border-color: var(--accent); }
+#search { width: 240px; }
+.toolbar select option { background: var(--bg3); }
+
+.tags-bar {
+  padding: .75rem 2.5rem;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  align-items: center;
+}
+.tags-bar span {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 4px;
+}
+.tag-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  transition: all .15s;
+}
+.tag-btn:hover { border-color: var(--text); color: var(--text); }
+.tag-btn.active { color: #000; border-color: transparent; }
+
+.btn-export {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-export:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── RESULTS BAR ─────────────────────── */
+.results-bar {
+  padding: .5rem 2.5rem;
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── TABLE ───────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color .15s;
+}
+thead th:hover { color: var(--text); }
+thead th.sorted { color: var(--accent); }
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+tbody tr:hover { background: var(--bg3); }
+td {
+  padding: 10px 16px;
+  vertical-align: middle;
+  color: var(--text);
+}
+
+.cell-nombre { font-weight: 500; font-size: 13px; max-width: 220px; }
+.cell-fecha { font-size: 12px; color: var(--muted); white-space: nowrap; font-style: italic; }
+.cell-desc { font-size: 12px; color: var(--muted); max-width: 220px; }
+.cell-lugar { font-size: 12px; color: var(--muted); max-width: 140px; }
+.cell-tags { max-width: 200px; }
+.cell-actions { white-space: nowrap; }
+
+/* ── TAGS ────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 2px;
+  margin: 2px 2px 2px 0;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: #000;
+}
+.tg-Mapping    { background: var(--tag-mapping); }
+.tg-Fooh       { background: var(--tag-fooh); }
+.tg-Hologramas { background: var(--tag-hologramas); }
+.tg-Inmersivos { background: var(--tag-inmersivos); }
+.tg-Interactivos { background: var(--tag-interactivos); }
+.tg-Pov        { background: var(--tag-pov); }
+.tg-Reels      { background: var(--tag-reels); }
+.tg-Virtual    { background: var(--tag-virtual); }
+.tg-Publicidad { background: var(--tag-publicidad); }
+.tg-Destacados { background: var(--tag-destacados); }
+.tg-Portafolio { background: #333; color: #888; }
+.tg-default    { background: #333; color: #aaa; }
+
+/* ── ACTION BUTTONS ──────────────────── */
+.btn-yt {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid #333;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  transition: all .15s;
+  margin-right: 4px;
+}
+.btn-yt:hover { border-color: #ff4444; color: #ff4444; }
+.btn-edit, .btn-del {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .15s;
+  margin-right: 4px;
+}
+.btn-edit:hover { border-color: var(--accent); color: var(--accent); }
+.btn-del:hover  { border-color: var(--danger); color: var(--danger); }
+
+/* ── MODAL ───────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+.modal h2 span { color: var(--accent); }
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none; border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color .15s;
+}
+.modal-close:hover { color: var(--text); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-group.full { grid-column: 1 / -1; }
+.form-group label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 9px 12px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color .15s;
+  resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { border-color: var(--accent); }
+.form-group textarea { min-height: 72px; }
+
+.tags-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tags-check label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  transition: all .15s;
+}
+.tags-check label:hover { border-color: var(--accent); }
+.tags-check input[type=checkbox] { accent-color: var(--accent); }
+
+.modal-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.btn-save {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 10px 24px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: opacity .15s;
+}
+.btn-save:hover { opacity: .85; }
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.btn-cancel:hover { border-color: var(--text); color: var(--text); }
+
+/* ── CONFIRM MODAL ───────────────────── */
+.confirm-modal {
+  max-width: 400px;
+  text-align: center;
+}
+.confirm-modal p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  font-size: 14px;
+}
+.confirm-modal .nombre {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 15px;
+  display: block;
+  margin-top: .5rem;
+}
+.btn-del-confirm {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* ── TOAST ───────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--accent);
+  color: #000;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 4px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── EMPTY STATE ─────────────────────── */
+.empty {
+  padding: 4rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  font-style: italic;
+}
+.loading-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0%;
+  transition: width .4s ease;
+  z-index: 9999;
+}
+.loading-bar.active { width: 75%; }
+.loading-bar.done   { width: 100%; opacity: 0; transition: width .2s, opacity .5s .2s; }
+.spinner {
+  display: none;
+  position: fixed;
+  bottom: 2rem; left: 2rem;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-style: italic;
+  background: var(--bg2);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.spinner.show { display: block; }
+
+@media (max-width: 640px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .header { padding: 1.5rem; }
+  .toolbar, .tags-bar { padding: 1rem 1.5rem; }
+  .table-wrap { padding: 0; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1><span>Pi</span> Proyección de Ideas</h1>
+    <p>Gestión de proyectos audiovisuales · 2010 – 2025</p>
+  </div>
+  <button class="btn-add" onclick="openModal()">+ Nuevo proyecto</button>
+</div>
+
+<!-- METRICS -->
+<div class="metrics" id="metrics">
+  <div class="metric"><div class="metric-label">Total</div><div class="metric-value" id="m-total">—</div></div>
+  <div class="metric"><div class="metric-label">Años</div><div class="metric-value" id="m-years">—</div></div>
+  <div class="metric"><div class="metric-label">Categorías</div><div class="metric-value" id="m-cats">—</div></div>
+  <div class="metric"><div class="metric-label">Destacados</div><div class="metric-value" id="m-dest">—</div></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Buscar proyecto, lugar, descripción…">
+  <select id="yearFilter"><option value="">Todos los años</option></select>
+  <button class="btn-export" onclick="exportCSV()">↓ Exportar CSV</button>
+</div>
+
+<div class="tags-bar">
+  <span>Filtrar:</span>
+  <div id="tagBtns"></div>
+</div>
+
+<div class="results-bar" id="resultsBar"></div>
+
+<!-- TABLE -->
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th data-col="proyecto">Proyecto</th>
+        <th data-col="fecha">Fecha</th>
+        <th>Etiquetas</th>
+        <th data-col="lugar">Lugar</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-overlay" id="formOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modalTitle">Nuevo <span>proyecto</span></h2>
+    <input type="hidden" id="editId">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nombre del proyecto *</label>
+        <input type="text" id="f-proyecto" placeholder="Ej: Mapping Congreso Futuro">
+      </div>
+      <div class="form-group">
+        <label>Fecha de realización *</label>
+        <input type="date" id="f-fecha">
+      </div>
+      <div class="form-group">
+        <label>Lugar</label>
+        <input type="text" id="f-lugar" placeholder="Ej: Palacio La Moneda">
+      </div>
+      <div class="form-group full">
+        <label>Link de YouTube (embed)</label>
+        <input type="text" id="f-link" placeholder="https://www.youtube.com/embed/XXXX">
+      </div>
+      <div class="form-group full">
+        <label>Descripción</label>
+        <textarea id="f-desc" placeholder="Breve descripción del proyecto…"></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Etiquetas</label>
+        <div class="tags-check" id="tagsCheck"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveProject()">Guardar proyecto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRM DELETE -->
+<div class="modal-overlay" id="confirmOverlay">
+  <div class="modal confirm-modal">
+    <h2>Eliminar <span>proyecto</span></h2>
+    <p>¿Seguro que deseas eliminar?<span class="nombre" id="delNombre"></span></p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-del-confirm" onclick="confirmDelete()">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+<!-- LOADING -->
+<div class="loading-bar" id="loadingBar"></div>
+<div class="spinner" id="spinner">Guardando en Sheets…</div>
+
+<script>
+// ──────────────────────────────────────────
+// DATOS INICIALES (se cargan solo la primera vez)
+// ──────────────────────────────────────────
+const INITIAL_DATA = [{"proyecto":"Mapping Congreso Futuro Atacama","fecha":"2025-01-15","etiquetas":"Destacados, Mapping, Portafolio","link":"https://www.youtube.com/embed/9S38UkdpJMw","descripcion":"Mapping en la Estación de trenes de Caldera, junto a la gran orquesta filarmónica regional de Atacama O.F.R.A..","lugar":"Estación de Trenes de Caldera"},{"proyecto":"FOOH Bresler / Viña","fecha":"2025-01-15","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/UeX6szW2wf4","descripcion":"Con intervenciones en Santiago y Viña, le damos la bienvenida al Verano con los nuevos helados de Bresler 2025.","lugar":"San Martín / Viña"},{"proyecto":"FOOH Bresler / Santiago","fecha":"2025-01-15","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/xg0GEK4QVuA","descripcion":"Con intervenciones en Santiago y Viña del Mar, bienvenida al Verano con los nuevos helados de Bresler 2025.","lugar":"MUT / Santiago"},{"proyecto":"FOOH Latam Coca-Cola Navidad","fecha":"2024-12-19","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/LJPEY38Bepk","descripcion":"La caravana de aviones que traslada al Viejo Pascuero recorre los cielos de las ciudades más icónicas de Latinoamérica.","lugar":"Santiago / Río / Miraflores / Quito"},{"proyecto":"FOOH Santander / Latam","fecha":"2024-11-29","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/4G-HL_G94t4","descripcion":"Ambas marcas inician su temporada de promos para viajeros con este impecable aviso en sus redes.","lugar":"Parque Araucano"},{"proyecto":"FOOH Agua Mineral Cachantún / Massiva","fecha":"2024-10-28","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/U9F8ROeXVw4","descripcion":"Record de Pi con más de 5 millones de views en menos de un mes. Lanzamiento de la nueva botella eco friendly.","lugar":"Edificio Corporativo CCU"},{"proyecto":"Reel Mapping 2024","fecha":"2024-10-01","etiquetas":"Mapping, Portafolio, Reels","link":"https://www.youtube.com/embed/JJ_mQ_NuwgU","descripcion":"Transformamos innumerables edificios, vehículos y elementos de retail con nuestra técnica de mapping.","lugar":""},{"proyecto":"FOOH Pizzería La Serrana","fecha":"2024-09-24","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/qWF7k8WrR7s","descripcion":"Revivimos el antiguo horno de Barrio Independencia, con una super Pizza XL de La Serrana.","lugar":"MALLBI"},{"proyecto":"FOOH Espumín Quix","fecha":"2024-08-21","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/QonquscQhR8","descripcion":"Ejercicio creativo del equipo de Pilab para jornada de experimentación con Fooh.","lugar":"Escuela Militar"},{"proyecto":"POV Rexona / Massiva","fecha":"2024-08-21","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/plF1p8v8qhs","descripcion":"Animación de gran formato de Copa América.","lugar":""},{"proyecto":"REEL Pi Proyección de Ideas 2024","fecha":"2024-08-01","etiquetas":"Portafolio, Reels","link":"https://www.youtube.com/embed/-TYODSKgjww","descripcion":"Un reel que muestra la trayectoria y el enfoque innovador de Pi.","lugar":"Santiago, Chile; Ontario, Canadá; México; Brasil"},{"proyecto":"REEL Publicidad de Allto Impacto Pi 2024","fecha":"2024-08-01","etiquetas":"Fooh, Portafolio, Pov, Reels","link":"https://www.youtube.com/embed/LMjb4ZvtHpw","descripcion":"Un recorrido por todos nuestros productos y servicios para provocar Publicidad de Alto Impacto.","lugar":""},{"proyecto":"REEL Inmersivos Pi 2024","fecha":"2024-08-01","etiquetas":"Inmersivos, Portafolio, Reels","link":"https://www.youtube.com/embed/vKD5R240qHs","descripcion":"","lugar":""},{"proyecto":"REEL Tiempo Real Y Producción Virtual 2024","fecha":"2024-08-01","etiquetas":"Portafolio, Producción Virtual, Reels","link":"https://www.youtube.com/embed/GOMvDZISw7o","descripcion":"","lugar":""},{"proyecto":"REEL Experiencias Interactivas 2024","fecha":"2024-08-01","etiquetas":"Interactivos, Portafolio, Reels","link":"https://www.youtube.com/embed/MzqUgR8RUlE","descripcion":"","lugar":""},{"proyecto":"REEL Shows y Dispositivos Holográficos Pi 2024","fecha":"2024-08-01","etiquetas":"Hologramas, Portafolio, Reels","link":"https://www.youtube.com/embed/XLLXV0c8EZ4","descripcion":"","lugar":""},{"proyecto":"FOOH Mi Bodega","fecha":"2024-07-24","etiquetas":"Destacados, Fooh, Portafolio","link":"https://www.youtube.com/embed/VJ_woABD4YQ","descripcion":"Campaña viral de alto impacto, para la llegada de Mi Bodega a sectores urbanos de Santiago.","lugar":"Metro Manquehue"},{"proyecto":"FOOH Banco Itaú","fecha":"2024-06-24","etiquetas":"Fooh, Portafolio","link":"https://www.youtube.com/embed/NUkywLlOVz0","descripcion":"De las marcas pioneras en utilizar esta herramienta como material publicitario. Comunicando su cambio de logo.","lugar":"Plaza Bulnes"},{"proyecto":"POV Coca-Cola / Massiva","fecha":"2024-05-01","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/2cx7Tqq1f0g","descripcion":"Contenido POV adaptado a diferentes formatos y puntos de vista con récord de producción en 10 días.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"POV BMW X2","fecha":"2024-04-21","etiquetas":"Destacados, Portafolio, Pov","link":"https://www.youtube.com/embed/1vZa7lGVdnQ?start=18","descripcion":"Una de las primeras marcas en llevar esta herramienta de publicidad a un evento corporativo.","lugar":"Hilaria"},{"proyecto":"Holograma Denise Rosenthal","fecha":"2024-01-21","etiquetas":"Destacados, Hologramas, Portafolio","link":"https://www.youtube.com/embed/YkFV_lL05vQ?start=247","descripcion":"Espectáculo holográfico para Congreso Futuro 2024.","lugar":""},{"proyecto":"POV Festigames 2023","fecha":"2023-11-19","etiquetas":"Interactivos, Portafolio, Pov","link":"https://www.youtube.com/embed/g1-c3mXqsKw","descripcion":"Pantallas de la Feria como elemento de alto impacto para su viralizacion y registro.","lugar":"Espacio Riesco / Expocenter"},{"proyecto":"Inmersivo Space Lab Brasil","fecha":"2023-11-01","etiquetas":"Inmersivos, Interactivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/hY1jhbCQM1A","descripcion":"Muchas experiencias en un mismo lugar.","lugar":""},{"proyecto":"Hand Ball Spacelab Brasil","fecha":"2023-11-01","etiquetas":"Interactivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/2X9zhtv6Kuo","descripcion":"Cámaras de alta frecuencia en tiempo real — cuerpo y tecnología como protagonistas.","lugar":""},{"proyecto":"INTERACTIVO en Tiempo Real Mazda","fecha":"2023-10-19","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/TjZa8nCD65w","descripcion":"Software para que el diseñador japonés del auto dibujara en tiempo real en un modelo 3D y se representara en el mapping del auto real.","lugar":""},{"proyecto":"POV Rappicard / Massiva","fecha":"2023-10-18","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/i-q8NbC46dc","descripcion":"Pantalla ícono, ahora con Itaú y Rappi comunicando su alianza.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"HOLOGRAMA / The Art of Banksy","fecha":"2023-10-15","etiquetas":"Destacados, Hologramas, Portafolio","link":"https://www.youtube.com/embed/oITmNbZjD_k","descripcion":"Grabado el 18 de Abril 2024 en Ontario, Londres.","lugar":""},{"proyecto":"POV Natura / Massiva","fecha":"2023-09-15","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/wtF0xf332aM","descripcion":"Primera vez con la marca Natura, generando un efecto 3D impresionante desde la planta baja del mall.","lugar":"Pantalla Gigante Costanera Center"},{"proyecto":"POV Axe / Rexona","fecha":"2023-09-05","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/AGMnNZVDdYY","descripcion":"Campaña para comunicar el nuevo desodorante en alianza con Bizarrap.","lugar":"Pantalla Esquina Boulevard Parque Arauco"},{"proyecto":"Mapping BMW X5","fecha":"2023-06-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/VBD0ywwkl3k","descripcion":"Mezcla de pantalla led de fondo y un mapping del auto en todo su esplendor.","lugar":""},{"proyecto":"POV Andina del Valle","fecha":"2023-06-01","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/yCxdYGnHXTI","descripcion":"Primera pantalla en publicar contenido POV en zonas de alto tráfico. Con Aguas Andinas.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"PRODUCCIÓN VIRTUAL Falabella / Sybilla","fecha":"2023-05-19","etiquetas":"Portafolio, Producción Virtual","link":"https://www.youtube.com/embed/kcWAeA_29yY","descripcion":"","lugar":""},{"proyecto":"POV Samsung Z Flip 4","fecha":"2023-01-16","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/6Li0SeIUvtw","descripcion":"Apoyo a Samsung en sus lanzamientos más importantes, contenido adaptado a diferentes formatos.","lugar":"Pantalla Metro Tobalaba y Costanera Center"},{"proyecto":"POV Stand Entel Coldplay","fecha":"2022-10-19","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/7QI7sKd7fJg","descripcion":"","lugar":""},{"proyecto":"POV Adidas","fecha":"2022-10-18","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/qmuCzZQL8CM","descripcion":"Una de las primeras campañas nacionales en integrar este tipo de contenido.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"POV Samsung S22","fecha":"2022-10-18","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/uDbQRftJT8E","descripcion":"Pi participó como asesor e importador de nueva pantalla esquinada.","lugar":"Tienda Samsung Costanera Center"},{"proyecto":"Holograma BMW","fecha":"2022-10-17","etiquetas":"Hologramas, Portafolio","link":"https://www.youtube.com/embed/Ndj5SQLJH5I","descripcion":"Lanzamiento de auto de BMW en Marzo del 2022.","lugar":""},{"proyecto":"Cubo Inmersivo Hyundai Mobility","fecha":"2022-10-15","etiquetas":"Destacados, Inmersivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/aPMgr96GLa0?start=2","descripcion":"","lugar":""},{"proyecto":"Charles Darwin Virtual","fecha":"2022-09-24","etiquetas":"Destacados, Portafolio, Producción Virtual","link":"https://www.youtube.com/embed/PyX-NI2DmYU?start=465","descripcion":"","lugar":""},{"proyecto":"POV Sony Pictures / Tren Bala","fecha":"2022-08-01","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/xMr4R-A7WwI","descripcion":"Combinar el efecto visual del 3D con imágenes del trailer de la película.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"POV Subway","fecha":"2022-08-01","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/OGF7-kYk7Xw","descripcion":"El sandwich más registrado y viralizado en una campaña.","lugar":"Pantalla Metro Tobalaba"},{"proyecto":"POV Entel Ricardo Arjona","fecha":"2022-08-01","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/sfLBLHyxOR4","descripcion":"Contenido POV para grandes artistas en Entel Conciertos 2022/2023.","lugar":"Movistar Arena"},{"proyecto":"Inmersivo Lanzamiento Betterfly Brasil","fecha":"2022-05-05","etiquetas":"Inmersivos, Portafolio","link":"https://www.youtube.com/embed/zVH7u3BrPIQ","descripcion":"Una puesta en escena que envuelve y cautiva a todos los invitados.","lugar":""},{"proyecto":"POV Samsung S22","fecha":"2022-01-18","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/8hbnJahmErw","descripcion":"Campaña 3D POV que comenzó la relación permanente con la marca Samsung.","lugar":"Pantalla Gigante Falabella Kennedy"},{"proyecto":"Reel Producción Virtual 2022","fecha":"2022-01-01","etiquetas":"Portafolio, Producción Virtual, Reels","link":"https://www.youtube.com/embed/PbeWWNHGm6M","descripcion":"","lugar":""},{"proyecto":"POV Samsung Z Flip 4","fecha":"2021-10-18","etiquetas":"Portafolio, Pov","link":"https://www.youtube.com/embed/jb_AUjxhkeI","descripcion":"Lograr contenido POV en una pantalla de grandes dimensiones, un gran desafío de diseño.","lugar":"Pantalla Gigante Falabella Kennedy"},{"proyecto":"Experiencia interactiva Im.Fusion","fecha":"2020-10-19","etiquetas":"Inmersivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/y6C2vvh_YCk","descripcion":"Experiencia tecnológica inmersiva del Museo del Mañana.","lugar":""},{"proyecto":"Mortal Kombat Demo","fecha":"2020-10-15","etiquetas":"Portafolio, Producción Virtual","link":"https://www.youtube.com/embed/vsPLf094Cis","descripcion":"","lugar":""},{"proyecto":"MAPPING Vitrina Epson","fecha":"2019-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/Om7yVxj-_40","descripcion":"Vitrina que mezcla proyección automatizada con elementos interiores y vidrio Electric Glass.","lugar":""},{"proyecto":"Cascada Interactiva Costanera Center","fecha":"2019-10-21","etiquetas":"Interactivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/fppvORKai_8","descripcion":"","lugar":""},{"proyecto":"Mapping Interactivo Casino Viña","fecha":"2019-01-10","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/DCYaCKlqFVE","descripcion":"","lugar":""},{"proyecto":"Mapping Ruinas de Huanchaca Bicentenario","fecha":"2018-10-23","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/KHj93BmprKQ","descripcion":"","lugar":""},{"proyecto":"MAPPING Coyhaique","fecha":"2018-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/oQ33-O55ZAc","descripcion":"","lugar":""},{"proyecto":"Mapping Festival de las Artes Valparaíso","fecha":"2018-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/kv4HUDpXzTM","descripcion":"","lugar":""},{"proyecto":"Muro Interactivo Carozzi","fecha":"2018-10-21","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/jVCZ7opKPMw","descripcion":"","lugar":""},{"proyecto":"HOLOGRAMA Piboox / Jameson","fecha":"2018-10-19","etiquetas":"Hologramas, Portafolio","link":"https://www.youtube.com/embed/6yTio8PMMAg","descripcion":"","lugar":""},{"proyecto":"Interactivo Hand Ball","fecha":"2018-10-19","etiquetas":"Interactivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/FaWraLgGclQ","descripcion":"","lugar":""},{"proyecto":"Mapping Super Luna","fecha":"2018-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/80mQbtkiM-0","descripcion":"","lugar":""},{"proyecto":"Mapping Cascanueces Palacio la Moneda","fecha":"2018-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/3WTeOCBdIbo","descripcion":"","lugar":""},{"proyecto":"Holograma en Aspersor de Agua","fecha":"2018-10-17","etiquetas":"Hologramas, Portafolio","link":"https://www.youtube.com/embed/aYqO_lVVjt8","descripcion":"","lugar":""},{"proyecto":"Interactivo Nike Phantom","fecha":"2018-10-01","etiquetas":"Interactivos, Portafolio, Publicidad Inmersiva","link":"https://www.youtube.com/embed/URD4BfHK9PA","descripcion":"","lugar":"GAM"},{"proyecto":"INTERACTIVO Nike mesa multitáctil y fiduciales","fecha":"2018-02-25","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/htZQORsowUc","descripcion":"","lugar":"Nike / Parque Arauco"},{"proyecto":"INTERACTIVO Arauco con Fiduciales 2018","fecha":"2018-02-24","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/X6WfXVMwrI0","descripcion":"","lugar":""},{"proyecto":"REEL Hologramas 2018","fecha":"2018-01-01","etiquetas":"Hologramas, Portafolio, Reels","link":"https://www.youtube.com/embed/NE-0pNbH-pg","descripcion":"Reel Hologramas realizado por Pi Proyección de Ideas el año 2018.","lugar":""},{"proyecto":"Mapping Peugeot","fecha":"2017-10-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/0fA_M3lQX2U","descripcion":"","lugar":""},{"proyecto":"Mapping CCHC","fecha":"2017-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/4SWY7k0y938","descripcion":"","lugar":""},{"proyecto":"Interactivo Pantalla Táctil Hypebox","fecha":"2017-04-25","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/NA0CqegjnRE","descripcion":"","lugar":""},{"proyecto":"REEL MAPPING 2017","fecha":"2017-01-01","etiquetas":"Mapping, Portafolio, Reels","link":"https://www.youtube.com/embed/f04FIjcmz9k","descripcion":"","lugar":""},{"proyecto":"Mapping Epson Challenge Chile","fecha":"2016-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/6KLGvLj2F2k","descripcion":"","lugar":""},{"proyecto":"Mapping interior Estacion Mapocho","fecha":"2016-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/fKiGV05UW4s","descripcion":"","lugar":""},{"proyecto":"Mapping Santander","fecha":"2015-10-22","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/wHa2Pfz7aHk","descripcion":"","lugar":""},{"proyecto":"Mapping Itaú","fecha":"2015-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/mUSb36QQ4zc","descripcion":"","lugar":""},{"proyecto":"Mapping Castillo Hidalgo","fecha":"2015-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/2vEGvfwBNuU","descripcion":"","lugar":""},{"proyecto":"Mapping BMW i3 / i5","fecha":"2014-10-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/y8o2KRoQ7G4","descripcion":"","lugar":""},{"proyecto":"MUI Museo Roma","fecha":"2014-10-21","etiquetas":"Interactivos, Portafolio","link":"https://www.youtube.com/embed/Anz1-QSKaQc/","descripcion":"","lugar":""},{"proyecto":"Mapping CHRISTIE Infocomm","fecha":"2014-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/NmfSeVGyQNM","descripcion":"","lugar":""},{"proyecto":"MAPPING 3D Escenográfico Peugeot","fecha":"2013-10-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/8ALDl19LGFM","descripcion":"","lugar":""},{"proyecto":"MAPPING Escenográfico Entel Summit 2013","fecha":"2013-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/-NrVCz3UBgs","descripcion":"","lugar":""},{"proyecto":"MAPPING Obertura Festival de Viña 2012","fecha":"2012-10-23","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/XyJRjrcZ-eA","descripcion":"","lugar":""},{"proyecto":"MAPPING Escenográfico Santander","fecha":"2012-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/kNvaJBAEz-0","descripcion":"","lugar":""},{"proyecto":"Sap Forum 2011","fecha":"2011-10-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/3nJBrlcriwg","descripcion":"","lugar":""},{"proyecto":"Mapping Escenográfico BanChile","fecha":"2011-10-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/UA6oTnLWZhw","descripcion":"","lugar":""},{"proyecto":"MAPPING Ventanas Sonda","fecha":"2011-05-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/IdeFyl5j2pQ","descripcion":"","lugar":""},{"proyecto":"Mapping Viña Errázuriz","fecha":"2011-05-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/kj0eibHKLkY","descripcion":"","lugar":""},{"proyecto":"MAPPING Minera Esperanza 2011","fecha":"2011-04-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/qDAcuciownU","descripcion":"","lugar":""},{"proyecto":"MAPPING Viña San Pedro Alemania","fecha":"2010-10-18","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/b2uUTroQ9V0","descripcion":"","lugar":""},{"proyecto":"Mapping Inauguración GAM","fecha":"2010-09-24","etiquetas":"Mapping, Portafolio","link":"https://www.youtube.com/embed/GgS-pGsFwes","descripcion":"","lugar":""}];
+
+const ALL_TAGS = ["Destacados","Mapping","Fooh","Hologramas","Inmersivos","Interactivos","Pov","Producción Virtual","Publicidad Inmersiva","Reels","Portafolio"];
+
+// ──────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────
+let projects = [];   // array de objetos
+let activeTag = null;
+let sortCol = "fecha";
+let sortAsc = false;
+let deleteId = null;
+
+// ──────────────────────────────────────────
+// CONFIG GOOGLE SHEETS
+// ──────────────────────────────────────────
+const API_URL = "https://script.google.com/a/macros/pi.cl/s/AKfycbzDLnbKG40y8NRyA0AoHy8SWrBKC01nudFqdc7sAyJvhP2Qsa12N1ykJj-jPo6tksKJsg/exec";
+
+// ──────────────────────────────────────────
+// STORAGE: lee y escribe en Google Sheets
+// ──────────────────────────────────────────
+async function loadData() {
+  showLoading(true);
+  try {
+    const res = await fetch(API_URL + "?action=getAll");
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      // Sheets devuelve los datos — asignar id numérico si falta
+      projects = data.map((p, i) => ({ ...p, id: p.id ? Number(p.id) : Date.now() + i }));
+    } else {
+      // Hoja vacía: cargar datos iniciales y guardar
+      projects = INITIAL_DATA.map((p, i) => ({ ...p, id: Date.now() + i }));
+      await saveData();
+    }
+  } catch (err) {
+    console.error("Error cargando datos:", err);
+    showToast("⚠ Error al conectar con Google Sheets");
+    // Fallback: datos iniciales en memoria
+    projects = INITIAL_DATA.map((p, i) => ({ ...p, id: Date.now() + i }));
+  }
+  showLoading(false);
+}
+
+async function saveData() {
+  try {
+    await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "save", projects }),
+    });
+  } catch (err) {
+    console.error("Error guardando datos:", err);
+    showToast("⚠ Error al guardar en Google Sheets");
+  }
+}
+
+// ──────────────────────────────────────────
+// CLASE CSS de cada etiqueta
+// ──────────────────────────────────────────
+function tagClass(t) {
+  const map = {
+    "Mapping":"tg-Mapping","Fooh":"tg-Fooh","Hologramas":"tg-Hologramas",
+    "Inmersivos":"tg-Inmersivos","Interactivos":"tg-Interactivos","Pov":"tg-Pov",
+    "Reels":"tg-Reels","Producción Virtual":"tg-Virtual",
+    "Publicidad Inmersiva":"tg-Publicidad","Destacados":"tg-Destacados","Portafolio":"tg-Portafolio"
+  };
+  return map[t] || "tg-default";
+}
+
+// ──────────────────────────────────────────
+// INIT: construir filtros
+// ──────────────────────────────────────────
+function initFilters() {
+  // Años únicos
+  const years = [...new Set(projects.map(p => p.fecha.substring(0,4)))].sort((a,b) => b-a);
+  const sel = document.getElementById("yearFilter");
+  sel.innerHTML = '<option value="">Todos los años</option>';
+  years.forEach(y => {
+    const o = document.createElement("option");
+    o.value = y; o.textContent = y;
+    sel.appendChild(o);
+  });
+
+  // Botones de tags
+  const container = document.getElementById("tagBtns");
+  container.innerHTML = "";
+  ALL_TAGS.forEach(tag => {
+    const btn = document.createElement("button");
+    btn.className = "tag-btn" + (activeTag === tag ? " active" : "");
+    btn.textContent = tag;
+    btn.style.setProperty("--active-bg", getTagColor(tag));
+    if (activeTag === tag) btn.style.background = getTagColor(tag);
+    btn.onclick = () => {
+      activeTag = activeTag === tag ? null : tag;
+      initFilters(); render();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function getTagColor(tag) {
+  const map = {
+    "Mapping":"#c8ff00","Fooh":"#00ffcc","Hologramas":"#ff9500",
+    "Inmersivos":"#ff6b6b","Interactivos":"#4db8ff","Pov":"#b8b8b8",
+    "Reels":"#ff80bf","Producción Virtual":"#80ff9e","Publicidad Inmersiva":"#ffcc44",
+    "Destacados":"#c8ff00","Portafolio":"#555"
+  };
+  return map[tag] || "#555";
+}
+
+// ──────────────────────────────────────────
+// FILTRAR Y ORDENAR
+// ──────────────────────────────────────────
+function getFiltered() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const yr = document.getElementById("yearFilter").value;
+  return projects.filter(p => {
+    if (yr && !p.fecha.startsWith(yr)) return false;
+    if (activeTag && !p.etiquetas.includes(activeTag)) return false;
+    if (q && !p.proyecto.toLowerCase().includes(q) &&
+            !p.lugar.toLowerCase().includes(q) &&
+            !p.descripcion.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a, b) => {
+    const va = (a[sortCol] || "").toLowerCase();
+    const vb = (b[sortCol] || "").toLowerCase();
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+}
+
+// ──────────────────────────────────────────
+// RENDER
+// ──────────────────────────────────────────
+function render() {
+  const filtered = getFiltered();
+
+  // Métricas
+  const allYears = new Set(filtered.map(p => p.fecha.substring(0,4))).size;
+  const allCats  = new Set(filtered.flatMap(p => p.etiquetas.split(",").map(t => t.trim()))).size;
+  const dest     = filtered.filter(p => p.etiquetas.includes("Destacados")).length;
+  document.getElementById("m-total").textContent = filtered.length;
+  document.getElementById("m-years").textContent = allYears;
+  document.getElementById("m-cats").textContent  = allCats;
+  document.getElementById("m-dest").textContent  = dest;
+
+  // Contador
+  document.getElementById("resultsBar").textContent =
+    `Mostrando ${filtered.length} de ${projects.length} proyectos`;
+
+  // Tabla
+  const tbody = document.getElementById("tbody");
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">Sin resultados para los filtros seleccionados.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => {
+    const tags = p.etiquetas.split(",").map(t => t.trim()).filter(t => t)
+      .map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join("");
+    const ytUrl = p.link
+      ? p.link.replace("/embed/", "/watch?v=").replace("?start=", "&t=")
+      : "";
+    const ytBtn = p.link
+      ? `<a class="btn-yt" href="${ytUrl}" target="_blank">▶ YT</a>`
+      : "";
+    const desc = p.descripcion
+      ? `<span class="cell-desc">${p.descripcion.substring(0, 75)}${p.descripcion.length > 75 ? "…" : ""}</span>`
+      : `<span style="color:#444">—</span>`;
+
+    return `<tr>
+      <td class="cell-nombre">${p.proyecto}</td>
+      <td class="cell-fecha">${p.fecha}</td>
+      <td class="cell-tags">${tags}</td>
+      <td class="cell-lugar">${p.lugar || "—"}</td>
+      <td>${desc}</td>
+      <td class="cell-actions">
+        ${ytBtn}
+        <button class="btn-edit" onclick="openEdit(${p.id})">Editar</button>
+        <button class="btn-del"  onclick="openDelete(${p.id})">Eliminar</button>
+      </td>
+    </tr>`;
+  }).join("");
+
+  // Ordenamiento: resaltar columna activa
+  document.querySelectorAll("thead th").forEach(th => {
+    th.classList.toggle("sorted", th.dataset.col === sortCol);
+  });
+}
+
+// ──────────────────────────────────────────
+// LOADING INDICATOR
+// ──────────────────────────────────────────
+function showLoading(on) {
+  const bar = document.getElementById("loadingBar");
+  const sp  = document.getElementById("spinner");
+  if (on) {
+    bar.classList.remove("done");
+    bar.classList.add("active");
+    sp.classList.add("show");
+  } else {
+    bar.classList.remove("active");
+    bar.classList.add("done");
+    sp.classList.remove("show");
+    setTimeout(() => bar.classList.remove("done"), 700);
+  }
+}
+
+// ──────────────────────────────────────────
+// MODAL NUEVO / EDITAR
+// ──────────────────────────────────────────
+function buildTagsCheck(selectedTags = []) {
+  const container = document.getElementById("tagsCheck");
+  container.innerHTML = ALL_TAGS.map(tag => `
+    <label>
+      <input type="checkbox" value="${tag}" ${selectedTags.includes(tag) ? "checked" : ""}>
+      ${tag}
+    </label>
+  `).join("");
+}
+
+function openModal() {
+  document.getElementById("modalTitle").innerHTML = 'Nuevo <span>proyecto</span>';
+  document.getElementById("editId").value = "";
+  document.getElementById("f-proyecto").value = "";
+  document.getElementById("f-fecha").value = new Date().toISOString().split("T")[0];
+  document.getElementById("f-lugar").value = "";
+  document.getElementById("f-link").value = "";
+  document.getElementById("f-desc").value = "";
+  buildTagsCheck();
+  document.getElementById("formOverlay").classList.add("open");
+}
+
+function openEdit(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById("modalTitle").innerHTML = 'Editar <span>proyecto</span>';
+  document.getElementById("editId").value = id;
+  document.getElementById("f-proyecto").value = p.proyecto;
+  document.getElementById("f-fecha").value = p.fecha;
+  document.getElementById("f-lugar").value = p.lugar;
+  document.getElementById("f-link").value = p.link;
+  document.getElementById("f-desc").value = p.descripcion;
+  const selTags = p.etiquetas.split(",").map(t => t.trim());
+  buildTagsCheck(selTags);
+  document.getElementById("formOverlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("formOverlay").classList.remove("open");
+}
+
+async function saveProject() {
+  const nombre = document.getElementById("f-proyecto").value.trim();
+  const fecha  = document.getElementById("f-fecha").value;
+  if (!nombre || !fecha) { showToast("⚠ Nombre y fecha son obligatorios"); return; }
+
+  // Obtener tags seleccionados
+  const tags = [...document.querySelectorAll("#tagsCheck input:checked")]
+    .map(cb => cb.value).join(", ");
+
+  const editId = document.getElementById("editId").value;
+
+  if (editId) {
+    // Actualizar existente
+    const idx = projects.findIndex(p => p.id == editId);
+    if (idx >= 0) {
+      projects[idx] = {
+        ...projects[idx],
+        proyecto: nombre,
+        fecha: fecha,
+        lugar: document.getElementById("f-lugar").value.trim(),
+        link: document.getElementById("f-link").value.trim(),
+        descripcion: document.getElementById("f-desc").value.trim(),
+        etiquetas: tags
+      };
+    }
+    showToast("Proyecto actualizado ✓");
+  } else {
+    // Nuevo proyecto
+    projects.unshift({
+      id: Date.now(),
+      proyecto: nombre,
+      fecha: fecha,
+      lugar: document.getElementById("f-lugar").value.trim(),
+      link: document.getElementById("f-link").value.trim(),
+      descripcion: document.getElementById("f-desc").value.trim(),
+      etiquetas: tags
+    });
+    showToast("Proyecto agregado ✓");
+  }
+
+  saveData();
+  closeModal();
+  initFilters();
+  render();
+  showLoading(true);
+  await saveData();
+  showLoading(false);
+}
+
+// ──────────────────────────────────────────
+// ELIMINAR
+// ──────────────────────────────────────────
+function openDelete(id) {
+  deleteId = id;
+  const p = projects.find(x => x.id === id);
+  document.getElementById("delNombre").textContent = p ? p.proyecto : "";
+  document.getElementById("confirmOverlay").classList.add("open");
+}
+
+function closeConfirm() {
+  deleteId = null;
+  document.getElementById("confirmOverlay").classList.remove("open");
+}
+
+async function confirmDelete() {
+  if (deleteId === null) return;
+  projects = projects.filter(p => p.id !== deleteId);
+  closeConfirm();
+  initFilters();
+  render();
+  showToast("Proyecto eliminado");
+  showLoading(true);
+  await saveData();
+  showLoading(false);
+}
+
+// ──────────────────────────────────────────
+// EXPORTAR CSV
+// ──────────────────────────────────────────
+function exportCSV() {
+  const filtered = getFiltered();
+  const headers = ["Proyecto","Fecha","Etiquetas","Lugar","Descripción","Link YouTube"];
+  const rows = filtered.map(p => [
+    `"${(p.proyecto||"").replace(/"/g,'""')}"`,
+    `"${p.fecha}"`,
+    `"${(p.etiquetas||"").replace(/"/g,'""')}"`,
+    `"${(p.lugar||"").replace(/"/g,'""')}"`,
+    `"${(p.descripcion||"").replace(/"/g,'""')}"`,
+    `"${(p.link||"").replace(/"/g,'""')}"`
+  ].join(","));
+
+  const csv = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `pi-proyectos-${new Date().toISOString().split("T")[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("CSV exportado ✓");
+}
+
+// ──────────────────────────────────────────
+// TOAST
+// ──────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+// ──────────────────────────────────────────
+// EVENTOS GLOBALES
+// ──────────────────────────────────────────
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("yearFilter").addEventListener("change", render);
+
+// Ordenamiento por columna
+document.querySelectorAll("thead th[data-col]").forEach(th => {
+  th.addEventListener("click", () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = false; }
+    render();
+  });
+});
+
+// Cerrar modal al hacer click fuera
+document.getElementById("formOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.getElementById("confirmOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeConfirm();
+});
+
+// ESC para cerrar modales
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeModal(); closeConfirm(); }
+});
+
+// ──────────────────────────────────────────
+// ARRANQUE
+// ──────────────────────────────────────────
+(async () => {
+  await loadData();
+  initFilters();
+  render();
+})();
+</script>
+</body>
+</html>
